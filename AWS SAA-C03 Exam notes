@@ -1,0 +1,38 @@
+S3 STORAGE CLASSES 
+•	General purpose – s3 standard 
+•	S3 standard IA – infrequent access 
+•	S3 standard IA – infrequent access – one – zone 
+•	S3 glacier instant retrieval 
+•	S3 glacier flexible retrieval 
+•	S3 glacier Deep archive 
+•	S3 intelligent tiering  
+
+S3 requester pay
+Requester or the downloading user must pay for the network cost. 
+Use case: Sharing large dataset to another account. 
+
+S3 event notification 
+Triggering an event when you do api related activity in S3 
+1.	SNS
+2.	SQS
+3.	Lambda 
+Using the AWS services resource access policy 
+
+S3 baseline performance 
+3500 request (put/get/delete) per second per prefix in a bucket. 
+For performance use the s3 multi part upload and S3 transfer acceleration option to optimum S3 performance usage. 
+
+S3 byte-Range fetches 
+•	Can specify and download only the small portion of the large dataset.
+•	Can mention specific bytes of the header of the file to download. 
+S3 select and glacier select 
+•	Filter using the sql query and get the data from s3 
+•	Less network transfer/less cost/less CPU 
+
+S3 Batch operation 
+Use S3 Batch operation to perform bulk operation on s3 objects 
+Use case: encrypt un-encrypted objects
+Note: S3 inventory to list s3 object 
+S3 inventory -> S3 select -> S3 batch 
+
+
