@@ -36,3 +36,54 @@ Note: S3 inventory to list s3 object
 S3 inventory -> S3 select -> S3 batch 
 
 
+AWS Networking basic  
+IP is designed with Octets (a group of eight digits) numeric values example: 0.0.0.0
+The 1st  four and last IP of the CIDR block cannot be used for any resources. 
+They are 
+1.	10.0.0.0 – Network address 
+2.	10.0.0.1 – VPC router 
+3.	10.0.0.2 – DNS server 
+4.	10.0.0.3 – Future use 
+5.	10.0.0.255 – Network broadcaster address 
+
+CNAME : A record to point to a non-root domain
+Eg . myaws.cert.com -> myapp.cert.com  
+ALIAS : A record to point to any / domain including root domain but it cannot to be pointed to EC2 instance. 
+Eg . myaws.cert.com ->www.cert.com
+RDS Proxy 
+It is a RDS feature used to make DB more resilient to failover by sharing connection using connection pools. 
+
+EC2  instance store : it is type of data storage provided by AWS 
+•	High performance hard disk
+•	Better I/O 
+•	Risk of data loss  
+Disaster Recovery 
+•	RPO – Recovery Point Objective 
+•	RTO – Recovery Time Objective 
+
+RPO <------(Data loss)----------->Disaster<-----(Downtime)------> RTO
+
+Strategies 
+1.	Backup and restore : high RPO/High RTO & low cost 
+2.	Pilot light : Core/small version of the application running  where the RPO and RTO is low
+3.	Warm standby : full application running in smaller capacity and can be scaled into fully functioning application in few minutes. 
+4.	Multi-site : lowest recovery time and a full production ready system running in the cloud. 
+ 
+Database Migration System 
+It is AWS migration service and typically used by installing the DMS into EC2 instance and start the migration. 
+Source DB (eg. On-prem MS SQL server) -------> DMS (ec2)---------> Target DB (MS RDS server ) 
+SCT: Scheme conversion tool used when there are different DB engines involved in the migration where the SCT is installed in the On-prem servers.  
+Source DB (eg. On-prem Oracle server) -------> DMS (ec2)---------> Target DB (MS RDS server ) 
+
+RDS / Aurora Mysql/PostgresSQL migration 
+RDS -------> Aurora Mysql 
+1.	Take a snapshot of the RDS  Mysql Aurora Mysql 
+2.	Create Aurora read replica from the RDS and when the replication is zero lag promote to its own DB and it takes time and high cost. 
+
+External MySql to Aurora Mysql 
+1.	Use precoma to get the backup and update it to the S3 and the from there upload it to Mysql Aurora. 
+2.	Use Mysqldump utility. 
+
+Exam tip : 
+EC2 in ALB can check IP of the the client / Application by X-forwarded-for header in the request or X-forward-Port/X-forward-Proto for part. 
+
