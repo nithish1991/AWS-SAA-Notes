@@ -127,8 +127,214 @@ Client Side encryption
 
 Amazon s3 in transit (SSL/TLS) always in https
 
-Amason S3 - force encryption in transit (TLS/SSL using aws:secureTransport
+Amason S3 - force encryption in transit (TLS/SSL) using aws:secureTransport
 aws:secureTransport: false (only allows https)
+
+
+SSE - S3 encryption is applied by default to new objects.
+
+CORS - Cross-Origin Resource Sharing
+Sharing resource from different region 
+e.g., for a S3 static website.
+
+S3 Access Log : Use S3 bucket as logging
+S3bucket for logs related to S3 access log.
+
+• Never enable monitor to logging bucket resulting in a loop.
+• Should be in the same region.
+
+Amazon S3 - Pre-Signed URL
+Allowing users to upload/download via a URL with a limited time frame.
+
+S3 Glacier Vault lock & S3 Object lock
+WORM - Write Once Read Many
+S3 Glacier Vault lock
+• Put object in Glacier Vault lock.
+• Get vault lock policy.
+• Used for compliance.
+
+S3 Object lock - lock the object.
+• Retention mode - governance = can overwrite by user.
+• Rentention mode Compliance = can't overwrite.
+
+Retention period: extend the fixed period 
+legal hold: use IAM permission S3: Put Object Legal Hold to protect the object indefinitely, from independent retention period.
+
+S3 Access Point
+• Simply access for S3 bucket. 
+• Access point has its own DNS name.
+
+S3 Object Lambda: use lambda function to update or get data and provide that data to many applications via S3 object lambda access point.
+
+AWS KMS
+• cloudtrail is enabled for KMS
+• Key rotation can be manually done.
+
+Types of KMS key
+• AWS Owned keys : SSE - S3
+• AWS Managed Keys : aws/rds
+• Customer-managed keys
+
+Automatic Key rotation 
+• AWS Managed keys: automatic every year. 
+• Customer-managed KMS: (must enable) automatic every year. 
+• Imported KMS key only manual rotation using alias.
+
+AMS key policy : who can access the KMS and used for cross-account access.
+
+Multi-Region key 
+(MRK) is achieved through replication of keys between regions.
+Use case: dynamodb global data & Global Aurora. 
+fields can be encrypted and decrypted through across region using MRK.
+
+S3 replication encryption
+SSE - C objects are not replicated 
+
+S3 - KMS encryption
+KMS key policy
+May need service annotations increase.
+Need IAM Role with (KMS: Decrypt/ KMS: Encrypt).
+
+Sharing Encrypted AMI → KMS
+• Source AMI encrypted via KMS.
+• Must modify launch permission.
+• Target account must have permission (IAM) Role to use then you launch EC2 from AMI optionally can create new KMS key.
+
+SSM Parameter Store
+• Store config and secrets.
+• Store in hierarchy.
+
+AWS Secrets Manager
+• Can rotate secret every X days.
+• Integrate RDS (mostly for RDS).
+• Multi-Region Secret (for Secret replication).
+
+WAF
+
+• ALB, API, CloudFront, AppSync GraphQL API, Cognito User Pool
+
+WAF (ACL) Rules - (Layer 7 protection): 
+• Can allow up to 10,000 IP addresses 
+• can filter based on HTTP headers, Body, or URI string.
+• SQL injection and cross-site scripting. 
+• Block counting (geography master). 
+• Rate-based rules (count occurrences per lP) For DDoS protection.
+
+AWS Shield
+Use to protect against DDoS attacks: protect from layer 4/3 attacks. 
+
+AWS Shield Advanced.
+• 24/7 access to DDoS response team.
+• Protect against higher fees during DDoS attacks.
+
+AWS Firewall Manager
+• Manages rules in all accounts of an AWS organization.
+• Rules are security policy, WAF rules, SG for ec2, Amazon s3 resolver.
+
+AWS guardDuty 
+Discovers threads across AWS accounts, gets data from the below 
+• cloudtrail logs 
+• VPC logs 
+• DNS logs 
+
+AWS Inspector
+Does security assessment on EC2, Lambda, container images.
+• Send assessment to Security Hub for reports and EventBridge for notification.
+• Scan infra when needed.
+• Provide a risk score.
+
+AWS Macie
+Scan sensitive data. Sensitive data stored in S3.
+
+Bastion host
+• Public users use bastion host to access private EC2 instances.
+• Bastion host should be in a public subnet.
+• Internet access must be enabled (SSH 22) inbound, for the bastion host.
+• Security group of bastion host must allow SSH to bastion host.
+
+NAT Instance
+• Allow instances in private subnet to access internet.
+• Must be in a Public Subnet.
+• Must have elastic IP.
+• Source and destination check should be disabled.
+• Route Table should be updated to channel traffic from private subnet to NAT instance.
+
+NAT Gateway
+•AWS managed NAT.
+• High bandwidth.
+• High availability, single AZ.
+
+NACL and Security Group
+• NACLs are stateless - (must open ephemeral ports).
+• Security groups are stateful.
+• Allow, do not edit Default NACL, create custom NACL.
+• Security groups operate at EC2 level / NACL operates at subnet level.
+
+VPC Endpoints using PrivateLink
+• Interface endpoint - using ENI.
+• Gateway endpoint - only used as a target in route table.
+• Gateway is free only for S3 and DynamoDB. 
+• Use interface endpoint only for S3 and DynamoDB with access required from on-prem or different VPC.
+
+AWS Site-2-site VPN
+Service used to connect VPC to on-prem over the internet via VPN, encrypted connection.
+
+Custom Gateway: deployed at client end 
+VPN Gateway: deployed at AWS end.
+Customer Gateway : use public IP or NAT device to connect to VPN.
+VPN at AWS needs to enable route propagation to access on-premises.
+
+VPN Cloudhub
+• Connect multiple site VPNs (S2S VPN) - low-cost hub and spoke model.
+
+Direct Connect (DX)
+• Provides private connection between VPC and on-premises using private virtual interface (VIF).
+• Data is not encrypted and you can add VPN on top of this connection.
+• Can connect to public AWS resources.
+• Direct Connect gateway can connect to more than one VPC.
+• Speed tiers: 1 Gbps, 10 Gbps, 100 Gbps.
+• High resiliency - use two AWS DX connections.
+• Maximum resiliency - use two separate connections in single DX location and build two DX connections between AWS and on-prem.
+
+Transit Gateway
+• Combine multiple VPNs, AWS VPNs together using transit gateway. 
+• Supports multicasting (is only supported by transit gateway).
+• Transit gateway + S2S VPN used to create large bandwidth
+• ECMP : equal-cost-Multi-path routing
+example : VPN to Virtual private gateway
+1 = 1.25 gbps 
+VPN to transit gateway 
+1 = 2.50 gbps 
+
+AWS VPC - Traffic mirroring
+Mirror the VPC traffic to AWS resource for inspection or analysis.
+
+Note:
+• One cannot disable IPv4.
+• In case you cannot launch an instance, a possible issue is that there is no IPv4 available; therefore, create a new IPv4 CIDR in the Subnet.
+
+Egress Only Internet Gateway
+Used by EC2 instance in private subnet with IPV6 IP to access the internet only.
+
+NAT gateway IPv4 Only 
+
+
+Networking Cost in AWS
+• If you need high-speed, use Private IP.
+• Use some AZs for maximum savings and less networking.
+
+Egress traffic - Traffic going outside AWS network is charged.
+Ingress traffic - Traffic incoming from outside to AWS is free.
+Egress traffic - Cost is higher.
+
+S3 networking cost 
+Use S3 and clodufront is much cheaper option 
+
+Network firewall 
+Is implemented at VPC level: Can do traffic filtering - allow, drop, and alert for traffic that filters rules.
+Active packet inspection throughout network.
+
+
 
 
 
