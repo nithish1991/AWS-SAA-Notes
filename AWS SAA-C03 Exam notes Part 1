@@ -87,3 +87,5 @@ External MySql to Aurora Mysql
 Exam tip : 
 EC2 in ALB can check IP of the the client / Application by X-forwarded-for header in the request or X-forward-Port/X-forward-Proto for part. 
 
+
+
