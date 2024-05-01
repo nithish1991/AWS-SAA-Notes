@@ -87,5 +87,48 @@ External MySql to Aurora Mysql
 Exam tip : 
 EC2 in ALB can check IP of the the client / Application by X-forwarded-for header in the request or X-forward-Port/X-forward-Proto for part. 
 
+S3 Security 
+1. S3 bucket policy for/to provide cross account user access
+
+2. S3 static website.
+bucket-name.s3-website-aws-region.amazonaws.com
+or 
+bucket-name.s3-website.aws-region.amazonaws.com
+
+S3 replication notes
+	•	﻿﻿Only new object replicated after enabling 
+  • for existing objects replication use s3 batch repliation
+	•	﻿﻿No replication for delete operation with Version ID
+
+Amazon S3 encryption - 4 types
+Sevar Side encryption - SSE - S3
+  • Keys managed by AWS (we cannot view the key)
+	•	﻿﻿encryption type: AES- 256
+	•	﻿﻿enabled by default
+	•	﻿﻿Must Set header "X-am2-server-side-encryption" : "AES-256"
+Insert image here 
+
+SSE - KMS
+* key managed by AWS - KMS (user control + can be audited by cloudtrail
+* header "X-am2-server-side-encryption" : "aws:kms"
+* KMS have limition : API Call 5500 - 30000 (throttling)per second.
+* can request to increase the throttling quotas. 
+
+insert image here  
+
+SSE - C
+* Key managed by customer outside AWS and encryption done by AWS
+	•	﻿﻿key not Stored in AWS.
+	•	﻿﻿https only
+* used https in all request
+
+Client Side encryption
+• encryption done outside by client and Stored in S3 Amazon
+
+Amazon s3 in transit (SSL/TLS) always in https
+
+Amason S3 - force encryption in transit (TLS/SSL using aws:secureTransport
+aws:secureTransport: false (only allows https)
+
 
 
